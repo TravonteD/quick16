@@ -3,6 +3,9 @@ Sequel.connect('sqlite://db/q16.db')
 require_relative '../../db/models/song'
 
 RSpec.describe Song do
+  it 'has a name' do
+    expect(Song.new).to respond_to :name
+  end
   it 'contains verses' do
     song = Song.new
 
