@@ -7,6 +7,10 @@ task :lint do
   sh 'rubocop -l'
 end
 
+task :run do
+  sh 'rackup'
+end
+
 namespace :db do
   desc "Run migrations"
   task :migrate, [:version] do |_, args|

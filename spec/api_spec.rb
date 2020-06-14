@@ -26,7 +26,7 @@ RSpec.describe Quick16::API do
     it 'returns a set of bars' do
       get '/api/bars'
 
-      expect(last_response.ok?).to be true
+      expect(last_response).to be_ok
       expect(last_response.body).to eq Bar.all.to_json
     end
   end
@@ -35,7 +35,7 @@ RSpec.describe Quick16::API do
     it 'returns the specified bar' do
       get "/api/bars/#{bar.id}"
 
-      expect(last_response.ok?).to be true
+      expect(last_response).to be_ok
       expect(last_response.body).to eq bar.to_json
     end
   end
@@ -46,8 +46,8 @@ RSpec.describe Quick16::API do
     it 'updates the bar and returns it' do
       put "/api/bars/#{bar.id}", data
       
-      expect(last_response.ok?).to be true
-      expect(JSON.parse(last_response.body, symbolize_names: true)[:text]).to eq 'this should be updated'
+      expect(last_response).to be_ok
+      expect(JSON.parse(last_response.body)['text']).to eq 'this should be updated'
     end
   end
 
@@ -55,7 +55,7 @@ RSpec.describe Quick16::API do
     it 'deletes the bar' do
       delete "/api/bars/#{bar.id}"
       
-      expect(last_response.ok?).to be true
+      expect(last_response).to be_ok
       expect(Bar[bar.id]).to be nil
     end
   end
@@ -64,7 +64,7 @@ RSpec.describe Quick16::API do
     it 'returns all verses' do
       get '/api/verses'
 
-      expect(last_response.ok?).to be true
+      expect(last_response).to be_ok
       expect(last_response.body).to eq Verse.all.to_json
     end
   end
@@ -73,8 +73,20 @@ RSpec.describe Quick16::API do
     it 'returns the specified verse' do
       get "/api/verses/#{verse.id}"
 
-      expect(last_response.ok?).to be true
+      expect(last_response).to be_ok
       expect(last_response.body).to eq verse.to_json
+    end
+  end
+
+  context 'PUT /api/verses/:id' do
+    it 'Updates the verse with the given bars' do
+      data = {
+        bars: [bar.id]
+      }
+      put "/api/verses/#{verse.id}", data
+
+      expect(last_response).to be_ok
+      expect(Verse[JSON.parse(last_response.body)['id']].bars).to include bar
     end
   end
 
@@ -82,7 +94,7 @@ RSpec.describe Quick16::API do
     it 'deletes the verse' do
       delete "/api/verses/#{verse.id}"
       
-      expect(last_response.ok?).to be true
+      expect(last_response).to be_ok
       expect(verse[verse.id]).to be nil
     end
   end
@@ -91,7 +103,7 @@ RSpec.describe Quick16::API do
     it 'returns all songs' do
       get '/api/songs'
 
-      expect(last_response.ok?).to be true
+      expect(last_response).to be_ok
       expect(last_response.body).to eq Song.all.to_json
     end
   end
@@ -100,7 +112,7 @@ RSpec.describe Quick16::API do
     it 'returns the specified song' do
       get "/api/songs/#{song.id}"
 
-      expect(last_response.ok?).to be true
+      expect(last_response).to be_ok
       expect(last_response.body).to eq song.to_json
     end
   end
@@ -109,7 +121,7 @@ RSpec.describe Quick16::API do
     it 'deletes the song' do
       delete "/api/songs/#{song.id}"
       
-      expect(last_response.ok?).to be true
+      expect(last_response).to be_ok
       expect(song[song.id]).to be nil
     end
   end

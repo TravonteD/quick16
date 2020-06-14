@@ -39,17 +39,28 @@ module Quick16
     end
 
     resource :verses do
-      desc 'Return a set of bars'
+      desc 'Return a set of verses'
       get do
         Verse.all
       end
 
-      desc 'Return the specified bar'
+      desc 'Return the specified verse'
       params do
-        requires :id, type: Integer, desc: 'Bar ID'
+        requires :id, type: Integer, desc: 'Verse ID'
       end
       get ':id' do
         Verse[params[:id]]
+      end
+
+      desc 'Updates the verse with the given bars'
+      params do
+        requires :id, type: Integer, desc: 'Verse ID'
+        requires :bars, type: Array, desc: 'list of Bar ID'
+      end
+      put ':id' do
+        verse = Verse[params[:id]]
+        verse.bars = params[:bars].map { Bar[_1] }
+        verse
       end
 
       desc 'deletes a verse'

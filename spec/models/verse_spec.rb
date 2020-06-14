@@ -14,4 +14,17 @@ RSpec.describe Verse do
 
     expect(verse).to respond_to :song
   end
+
+  describe '#bars=' do
+    it 'sets the verses bars to the list' do
+      bar = Bar.create
+      verse = Verse.create
+
+      expect(verse.bars).to be_empty
+
+      verse.bars = [bar]
+
+      expect(verse.bars).to include bar
+    end
+  end
 end
