@@ -37,5 +37,51 @@ module Quick16
         Bar[params[:id]].delete
       end
     end
+
+    resource :verses do
+      desc 'Return a set of bars'
+      get do
+        Verse.all
+      end
+
+      desc 'Return the specified bar'
+      params do
+        requires :id, type: Integer, desc: 'Bar ID'
+      end
+      get ':id' do
+        Verse[params[:id]]
+      end
+
+      desc 'deletes a verse'
+      params do
+        requires :id, type: Integer, desc: 'Verse ID'
+      end
+      delete ':id' do
+        Verse[params[:id]].delete
+      end
+    end
+
+    resource :songs do
+      desc 'Return a set of bars'
+      get do
+        Song.all
+      end
+
+      desc 'Return the specified bar'
+      params do
+        requires :id, type: Integer, desc: 'Bar ID'
+      end
+      get ':id' do
+        Song[params[:id]]
+      end
+
+      desc 'deletes a song'
+      params do
+        requires :id, type: Integer, desc: 'Song ID'
+      end
+      delete ':id' do
+        Song[params[:id]].delete
+      end
+    end
   end
 end
