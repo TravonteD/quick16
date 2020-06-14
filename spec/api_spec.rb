@@ -125,4 +125,16 @@ RSpec.describe Quick16::API do
       expect(song[song.id]).to be nil
     end
   end
+
+  context 'PUT /api/songs/:id' do
+    it 'Updates the song with the given verses' do
+      data = {
+        verses: [verse.id]
+      }
+      put "/api/songs/#{song.id}", data
+
+      expect(last_response).to be_ok
+      expect(Song[JSON.parse(last_response.body)['id']].verses).to include verse
+    end
+  end
 end

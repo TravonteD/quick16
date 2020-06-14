@@ -86,6 +86,17 @@ module Quick16
         Song[params[:id]]
       end
 
+      desc 'Updates the verse with the given bars'
+      params do
+        requires :id, type: Integer, desc: 'Song ID'
+        requires :verses, type: Array, desc: 'list of Verse ID'
+      end
+      put ':id' do
+        song = Song[params[:id]]
+        song.verses = params[:verses].map { Verse[_1] }
+        song
+      end
+
       desc 'deletes a song'
       params do
         requires :id, type: Integer, desc: 'Song ID'
