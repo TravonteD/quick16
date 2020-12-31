@@ -10,10 +10,7 @@ end
 
 RSpec.describe Quick16::API do
   include Rack::Test::Methods
-   
-  let(:bar) { Bar.create }
-  let(:verse) { Verse.create }
-  let(:song) { Song.create }
+
   after(:each) do
     [Bar, Verse, Song].each { clean(_1) }
   end
@@ -33,6 +30,8 @@ RSpec.describe Quick16::API do
 
   context 'GET /api/bar/:id' do
     it 'returns the specified bar' do
+      bar = Bar.create
+
       get "/api/bars/#{bar.id}"
 
       expect(last_response).to be_ok
@@ -41,11 +40,12 @@ RSpec.describe Quick16::API do
   end
 
   context 'PUT /api/bars/:id' do
-    let(:data) { { text: 'this should be updated' } }
-
     it 'updates the bar and returns it' do
+      bar = Bar.create
+      data = { text: 'this should be updated' }
+
       put "/api/bars/#{bar.id}", data
-      
+
       expect(last_response).to be_ok
       expect(JSON.parse(last_response.body)['text']).to eq 'this should be updated'
     end
@@ -53,6 +53,8 @@ RSpec.describe Quick16::API do
 
   context 'DELETE /api/bars/:id' do
     it 'deletes the bar' do
+      bar = Bar.create
+
       delete "/api/bars/#{bar.id}"
       
       expect(last_response).to be_ok
@@ -71,6 +73,8 @@ RSpec.describe Quick16::API do
 
   context 'GET /api/verses/:id' do
     it 'returns the specified verse' do
+      verse = Verse.create
+
       get "/api/verses/#{verse.id}"
 
       expect(last_response).to be_ok
@@ -80,6 +84,9 @@ RSpec.describe Quick16::API do
 
   context 'PUT /api/verses/:id' do
     it 'Updates the verse with the given bars' do
+      bar = Bar.create
+      verse = Verse.create
+
       data = {
         bars: [bar.id]
       }
@@ -92,6 +99,8 @@ RSpec.describe Quick16::API do
 
   context 'DELETE /api/verses/:id' do
     it 'deletes the verse' do
+      verse = Verse.create
+
       delete "/api/verses/#{verse.id}"
       
       expect(last_response).to be_ok
@@ -110,6 +119,8 @@ RSpec.describe Quick16::API do
 
   context 'GET /api/songs/:id' do
     it 'returns the specified song' do
+      song = Song.create
+
       get "/api/songs/#{song.id}"
 
       expect(last_response).to be_ok
@@ -119,8 +130,10 @@ RSpec.describe Quick16::API do
 
   context 'DELETE /api/songs/:id' do
     it 'deletes the song' do
+      song = Song.create
+
       delete "/api/songs/#{song.id}"
-      
+
       expect(last_response).to be_ok
       expect(song[song.id]).to be nil
     end
@@ -128,9 +141,12 @@ RSpec.describe Quick16::API do
 
   context 'PUT /api/songs/:id' do
     it 'Updates the song with the given verses' do
+      song = Song.create
+      verse = Verse.create
       data = {
         verses: [verse.id]
       }
+
       put "/api/songs/#{song.id}", data
 
       expect(last_response).to be_ok
